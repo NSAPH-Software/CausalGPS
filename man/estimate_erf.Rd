@@ -7,9 +7,9 @@
 estimate_erf(.data, .formula, weights_col_name, model_type, w_vals, ...)
 }
 \arguments{
-\item{.data}{A data frame containing an observed continuous exposure variable, weights,
-and an observed outcome variable. Includes an \code{id} column for future
-reference.}
+\item{.data}{A data frame containing an observed continuous exposure
+variable, weights, and an observed outcome variable. Includes an \code{id} column
+for future reference.}
 
 \item{.formula}{A formula specifying the relationship between the exposure
 variable and the outcome variable. For example, Y ~ w.}

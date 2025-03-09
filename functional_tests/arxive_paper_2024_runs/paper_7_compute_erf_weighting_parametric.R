@@ -20,6 +20,7 @@ erf_obj_parametric_weighting <- estimate_erf(
   model_type = "parametric",
   .family = "gaussian")
 
+<<<<<<< HEAD
 pdf("figure_paper_7_erf_obj_parametric_weighting.pdf")
 plot(erf_obj_parametric_weighting)
 dev.off()
@@ -50,4 +51,23 @@ dev.off()
 #pdf("figure_paper_7_erf_obj_nonparametric_weighting.pdf")
 #plot(erf_obj_nonparametric_weighting)
 #dev.off()
+=======
 
+>>>>>>> 433f032 (having progress ...)
+
+pdf("figure_paper_7_erf_obj_parametric_weighting.pdf")
+plot(erf_obj_parametric_weighting)
+dev.off()
+
+
+erf_obj_semiparametric_weighting <- estimate_erf(
+  .data = pseudo_pop_weighting_object$.data,
+  .formula = education ~ w,
+  weights_col_name = "counter_weight",
+  w_vals = seq(2,20,0.5),
+  model_type = "semiparametric",
+  .family = "gaussian")
+
+pdf("figure_paper_7_erf_obj_semiparametric_weighting.pdf")
+plot(erf_obj_semiparametric_weighting)
+dev.off()

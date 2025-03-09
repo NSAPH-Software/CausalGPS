@@ -271,4 +271,3 @@ fit_model <- function(data, formula, weights, model_type, ...) {
   }
   return(model)
 }
-

@@ -36,3 +36,21 @@ erf_obj_semiparametric_matching <- estimate_erf(
 pdf("figure_paper_8_erf_obj_semiparametric_matching.pdf")
 plot(erf_obj_semiparametric_matching)
 dev.off()
+<<<<<<< HEAD
+=======
+
+
+erf_obj_nonparametric_matching <- estimate_erf(
+  .data = pseudo_pop_matching_object$.data,
+  .formula = education ~ w,
+  weights_col_name = "counter_weight",
+  w_vals = seq(2,20,0.5),
+  bw_seq = seq(0.1,2,0.1),
+  kernel_appr = "kernsmooth",
+  model_type = "nonparametric",
+  .family = "gaussian")
+
+pdf("figure_paper_8_erf_obj_nonparametric_matching.pdf")
+plot(erf_obj_nonparametric_matching)
+dev.off()
+>>>>>>> 433f032 (having progress ...)

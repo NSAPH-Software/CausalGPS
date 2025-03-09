@@ -21,6 +21,9 @@ confounders   <- c("mean_bmi", "smoke_rate",
 trimmed_df <- trim_it(data, c(0.05, 0.95), "w")
 
 
+trimmed_df <- trim_it(data, c(0.05, 0.95), "w")
+
+
 pseudo_pop_weighting_object <- generate_pseudo_pop(
                                            .data = trimmed_df,
                                            cw_obj = cw_weighting_object,
