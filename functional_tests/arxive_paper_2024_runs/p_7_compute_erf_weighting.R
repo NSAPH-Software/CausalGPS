@@ -65,6 +65,6 @@ for (kernel in nonparam_kernels) {
     formula_str = "Y ~ w",
     model_type = "nonparametric",
     suffix = paste0("nonparametric_", kernel, "_weighting"),
-    extra_args = list(bw_seq = 20, kernel_appr = kernel)
+    extra_args = list(bw_seq = seq(0.2,2,0.2), kernel_appr = kernel)
   )
 }
