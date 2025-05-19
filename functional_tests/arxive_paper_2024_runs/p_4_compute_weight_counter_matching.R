@@ -22,7 +22,7 @@ cw_matching_object <- compute_counter_weight(gps_obj = data_with_gps_normal_tr,
                                              scale = 1)
 
 pdf("figure_paper_4_matching_data.pdf")
-plot(cw_matching_object)
+plot(cw_matching_object, every_n = 1000)
 dev.off()
 
 

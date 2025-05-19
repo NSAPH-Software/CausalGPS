@@ -1,5 +1,6 @@
 library(CausalGPS)
 library(data.table)
+library(ggplot2)
 
 if (!file.exists("study_data.RData")) {
   set.seed(562)
