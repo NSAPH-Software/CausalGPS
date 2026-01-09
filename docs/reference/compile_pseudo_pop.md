@@ -1,0 +1,112 @@
+# Compile pseudo population
+
+Compiles pseudo population based on the original population and
+estimated GPS value.
+
+## Usage
+
+``` r
+compile_pseudo_pop(
+  data_obj,
+  ci_appr,
+  gps_density,
+  exposure_col_name,
+  nthread,
+  ...
+)
+```
+
+## Arguments
+
+- data_obj:
+
+  A S3 object including the following:
+
+  - Original data set + GPS values
+
+  - e_gps_pred
+
+  - e_gps_std_pred
+
+  - w_resid
+
+  - gps_mx (min and max of gps)
+
+  - w_mx (min and max of w).
+
+- ci_appr:
+
+  Causal inference approach.
+
+- gps_density:
+
+  Model type which is used for estimating GPS value, including `normal`
+  and `kernel`.
+
+- exposure_col_name:
+
+  Exposure data column name.
+
+- nthread:
+
+  An integer value that represents the number of threads to be used by
+  internal packages.
+
+- ...:
+
+  Additional parameters.
+
+## Value
+
+`compile_pseudo_pop` returns the pseudo population data that is compiled
+based on the selected causal inference approach.
+
+## Details
+
+For matching approach, use an extra parameter, `bin_seq`, which is
+sequence of w (treatment) to generate pseudo population. If `NULL` is
+passed the default value will be used, which is
+`seq(min(w)+delta_n/2,max(w), by=delta_n)`.
+
+## Examples
+
+``` r
+# \donttest{
+set.seed(112)
+m_d <- generate_syn_data(sample_size = 100)
+
+m_xgboost <- function(nthread = 1,
+                      ntrees = 35,
+                      shrinkage = 0.3,
+                      max_depth = 5,
+                      ...) {SuperLearner::SL.xgboost(
+                        nthread = nthread,
+                        ntrees = ntrees,
+                        shrinkage=shrinkage,
+                        max_depth=max_depth,
+                        ...)}
+
+data_with_gps <- estimate_gps(.data = m_d,
+                              .formula = w ~ cf1 + cf2 + cf3 +
+                                             cf4 + cf5 + cf6,
+                              gps_density = "normal",
+                              sl_lib = c("m_xgboost")
+                             )
+#> Error in get(library$library$predAlgorithm[s], envir = env): object 'm_xgboost' not found
+
+
+pd <- compile_pseudo_pop(data_obj = data_with_gps,
+                         ci_appr = "matching",
+                         gps_density = "normal",
+                         bin_seq = NULL,
+                         exposure_col_name = c("w"),
+                         nthread = 1,
+                         dist_measure = "l1",
+                         covar_bl_method = 'absolute',
+                         covar_bl_trs = 0.1,
+                         covar_bl_trs_type= "mean",
+                         delta_n = 0.5,
+                         scale = 1)
+#> Error: object 'data_with_gps' not found
+# }
+```

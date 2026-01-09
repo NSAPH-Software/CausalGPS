@@ -1,0 +1,120 @@
+# Generating Pseudo Population
+
+Pseudo population dataset is computed based on user-defined causal
+inference approaches (e.g., matching or weighting). A covariate balance
+test is performed on the pseudo population dataset. Users can specify
+covariate balance criteria and activate an adaptive approach and number
+of attempts to search for a target pseudo population dataset that meets
+the covariate balance criteria.
+
+## Usage
+
+Input parameters:
+
+**`w`** A data.frame of observed continues exposure, including `id` and
+`w` columns. **`c`** A data frame or matrix of observed baseline
+covariates, also includes `id` column,  
+**`ci_appr`** The causal inference approach. Options are “matching” and
+“weighting”.  
+**`dist_measure`** Distance measuring function.  
+**`scale`** specified scale parameter to control the relative weight
+that is attributed to the distance measures of the exposure versus the
+GPS estimates  
+**`delta_n`** specified caliper parameter on the exposure  
+**`covar_bl_method`** specified covariate balance method  
+**`covar_bl_trs`** specified covariate balance threshold  
+**`max_attempt`** maximum number of attempt to satisfy covariate balance
+
+## Technical Details for Matching
+
+The matching algorithm aims to match an observed unit $`j`$ to each
+$`j'`$ at each exposure level $`w^{(l)}`$.
+
+1.  We specify **`delta_n`** ($`\delta_n`$), a caliper for any exposure
+    level $`w`$, which constitutes equally sized bins, i.e.,
+    $`[w-\delta_n, w+\delta_n]`$. Based on the caliper **`delta_n`** ,
+    we define a predetermined set of $`L`$ exposure levels
+    $`\{w^{(1)}=\min(w)+ \delta_n,w^{(2)}=\min(w)+3 \delta_n,...,w^{(L)} = \min(w)+(2L-1) \delta_n\}`$,
+    where
+    $`L = \lfloor \frac{\max(w)-\min(w)}{2\delta_n} + \frac{1}{2} \rfloor`$.
+    Each exposure level $`w^{(l)}`$ is the midpoint of equally sized
+    bins, $`[w^{(l)}-\delta_n, w^{(l)}+\delta_n]`$.
+
+2.  We implement a nested-loop algorithm, with $`l`$ in
+    $`1,2,\ldots, L`$ as the outer-loop, and $`j'`$ in $`1 ,\ldots,N`$
+    as the inner-loop. The algorithm outputs the final product of our
+    design stage, i.e., a matched set with $`N\times L`$ units.  
+    **for** $`l = 1,2,\ldots, L`$**do**  
+      Choose **one** exposure level of interest
+    $`w^{(l)} \in  \{w^{(1)}, w^{(2)}, ..., w^{(L)}\}`$.  
+      **for** $`j' = 1 ,\ldots,N`$**do**  
+      2.1 Evaluate the GPS $`\hat{e}(w^{(l)}, \mathbf{c}_{j'})`$ (for
+    short $`e^{(l)}_{j'}`$) at $`w^{(l)}`$ based on the fitted GPS model
+    in Step 1 for each unit $`j'`$ having observed covariates
+    $`\mathbf{c}_{j'}`$.  
+      2.2 Implement the matching to find **an** observed unit – denoted
+    by $`j`$ – that matched with $`j'`$ with respect to both the
+    exposure $`w_{j}\approx w^{(l)}`$ and the estimated GPS
+    $`\hat{e}(w_j, \mathbf{c}_{j}) \approx e^{(l)}_{j'}`$ (under a
+    standardized Euclidean transformation). More specifically, we find a
+    $`j`$ as
+    ``` math
+
+     j_{{gps}}(e^{(l)}_{j'},w^{(l)})=\text{arg} \ \underset{j: w_j \in [w^{(l)}-\delta_n,w^{(l)}+\delta_n]}{\text{min}} \ \mid\mid( \lambda \hat{e}^{*}(w_j,\mathbf{c}_j), (1-\lambda)w^{*}_j) -(\lambda e_{j'}^{(l)*}, (1-\lambda) w^{(l)*})\mid\mid,
+     
+    ```
+    where **`dist_measure`** ($`||.||`$) is a pre-specified
+    two-dimensional metric, **`scale`** ($`\lambda`$) is the scale
+    parameter assigning weights to the corresponding two dimensions
+    (i.e., the GPS and exposure), and $`\delta`$ is the caliper defined
+    in Step 2 allowing that only the unit $`j`$ with an observed
+    exposure $`w_j \in [w^{(l)}-\delta,w^{(l)}+\delta]`$ can get
+    matched.  
+      2.3 Impute $`Y_{j'}(w^{(l)})`$ as:
+    $`\hat{Y}_{j'}(w^{(l)})=Y^{obs}_{j_{{gps}}(e^{(l)}_{j'},w^{(l)})}`$.  
+      **end for**
+
+    **end for**
+
+3.  After implementing the matching algorithm, we construct the matched
+    set with $`N\times L`$ units by combining all
+    $`\hat{Y}_{j'}(w^{(l)})`$ for $`j'=1,\ldots,N`$ and for all
+    $`w^{(l)} \in  \{w^{(1)},w^{(2)},...,w^{(L)}\}`$.
+
+## Technical Details for Covariate Balance
+
+We introduce the absolute correlation measure (**`covar_bl_method`** =
+“absolute”) to assess covariate balance for continuous exposures . The
+absolute correlation between the exposure and each pre-exposure
+covariate is a global measure and can inform whether the whole matched
+set is balanced. The measures above build upon the work by (Austin 2019)
+who examine covariate balance conditions with continuous exposures. We
+adapt them into the proposed matching framework.
+
+In a balanced pseudo population dataset, the correlations between the
+exposure and pre-exposure covariates should close to zero, that is
+$`E [\mathbf{c}_{i}^{*}  w_{i}^{*} ] \approx \mathbf{0}.`$ We calculate
+the absolute correlation in the pseudo population dataset as  
+``` math
+\begin{align*}
+ \big\lvert \sum_{i=1}^{N\times L}  \mathbf{c}_{i}^{*}  w_{i}^{*} \big\lvert
+\end{align*}
+```
+
+The average absolute correlations are defined as the average of absolute
+correlations among all covariates. Average absolute correlation:
+``` math
+\begin{align*}
+\overline{\big\lvert \sum_{i=1}^{N\times L} \mathbf{c}_{i}^{*}  w_{i}^{*} \big\lvert} < \boldsymbol{\epsilon}_1.
+\end{align*}
+```
+We specify a pre-specified threshold **`covar_bl_trs`**
+($`\boldsymbol{\epsilon}_1`$), for example 0.1, on average absolute
+correlation as the threshold for covariate balance in the pseudo
+population dataset.
+
+## References
+
+Austin, Peter C. 2019. “Assessing Covariate Balance When Using the
+Generalized Propensity Score with Quantitative or Continuous Exposures.”
+*Statistical Methods in Medical Research* 28 (5): 1365–77.
