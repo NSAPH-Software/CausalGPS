@@ -60,13 +60,28 @@ for (i in seq_along(semi_formulas)) {
 }
 
 # NONPARAMETRIC MODELS
-nonparam_kernels <- c("kernsmooth", "locpol")
+# nonparam_kernels <- c("kernsmooth", "locpol")
+#
+# for (kernel in nonparam_kernels) {
+#   run_and_plot_erf(
+#     formula_str = "Y ~ w",
+#     model_type = "nonparametric",
+#     suffix = paste0("nonparametric_", kernel, "_matching"),
+#     extra_args = list(bw_seq = seq(0.2,2,0.2), kernel_appr = kernel)
+#   )
+# }
 
-for (kernel in nonparam_kernels) {
-  run_and_plot_erf(
-    formula_str = "Y ~ w",
-    model_type = "nonparametric",
-    suffix = paste0("nonparametric_", kernel, "_matching"),
-    extra_args = list(bw_seq = seq(0.2,2,0.2), kernel_appr = kernel)
-  )
-}
+erf_kernsmooth <- estimate_erf(
+  .data = data,
+  .formula = Y ~ w,
+  weights_col_name = "counter_weight",
+  w_vals = w_vals,
+  model_type = "nonparametric",
+  bw_seq = seq(0.1, 2.0, 0.01),
+  kernel_appr = "kernsmooth",
+  nthread = 12
+)
+
+pdf(paste0("figure_paper_8_erf_obj_kernsmooth_matching.pdf"))
+plot(erf_kernsmooth)
+dev.off()
