@@ -1,3 +1,11 @@
+## CausalGPS 0.5.1 (2025-01-10)
+
+### Removed
+* Strict tests.
+
+### Modified
+* Transfered the maintainer role from Dr. Naeem Khoshnevis to Dr. Xiao Wu.
+
 ## CausalGPS 0.5.0 (2024-06-19)
 
 ### Added 
