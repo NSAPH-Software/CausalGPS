@@ -1,0 +1,37 @@
+# The 'CausalGPS' package.
+
+An R package for implementing matching and weighting on generalized
+propensity scores with continuous exposures.
+
+## Details
+
+We developed an innovative approach for estimating causal effects using
+observational data in settings with continuous exposures, and introduce
+a new framework for GPS caliper matching.
+
+## References
+
+Wu, X., Mealli, F., Kioumourtzoglou, M.A., Dominici, F. and Braun, D.,
+2022. Matching on generalized propensity scores with continuous
+exposures. Journal of the American Statistical Association, pp.1-29.
+
+Kennedy, E.H., Ma, Z., McHugh, M.D. and Small, D.S., 2017.
+Non-parametric methods for doubly robust estimation of continuous
+treatment effects. Journal of the Royal Statistical Society. Series B
+(Statistical Methodology), 79(4), pp.1229-1245.
+
+## See also
+
+Useful links:
+
+- <https://github.com/NSAPH-Software/CausalGPS>
+
+- Report bugs at <https://github.com/NSAPH-Software/CausalGPS/issues>
+
+## Author
+
+Naeem Khoshnevis
+
+Xiao Wu
+
+Danielle Braun

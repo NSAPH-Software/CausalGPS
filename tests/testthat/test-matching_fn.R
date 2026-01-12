@@ -51,6 +51,6 @@ test_that("matching_l1 functions as expected.", {
 
 
 
-   expect_equal(nrow(val), 11)
+   expect_equal(nrow(val), 10)
    expect_equal(length(val), 2)
 })

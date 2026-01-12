@@ -10,8 +10,6 @@
 #' observational data in settings with continuous exposures, and introduce a new
 #' framework for GPS caliper matching.
 #'
-#' @docType package
-#' @name CausalGPS-package
 #' @aliases CausalGPS
 #' @author Naeem Khoshnevis
 #' @author Xiao Wu
@@ -36,4 +34,4 @@
 #'  Journal of the Royal Statistical Society. Series B (Statistical Methodology),
 #'  79(4), pp.1229-1245.
 #'
-NULL
+"_PACKAGE"

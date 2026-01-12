@@ -1,8 +1,10 @@
-Submission (June 19, 2024)
+Submission (January 11, 2026)
 
-Thank you so much for taking the time and reviewing the CausalGPS 0.5.0 package. In this version upgrade we:
+Thank you for taking the time to review CausalGPS version 0.5.1.
 
-- Added formula to collect features from the user
+In this update, we have addressed a strict test that was causing failures on some operating systems. 
+
+All checks and tests pass successfully on our end.
 
 Best regards, 
 Naeem Khoshnevis
